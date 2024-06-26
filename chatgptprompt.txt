@@ -1,3 +1,7 @@
 General Overview:
 
-Create a web app
+Create a web app that uses the ELO ranking system to compare different items to determine which item is best or has the highest score. The app will be called "ELO Simple Comparison"
+
+Page breakdown:
+
+index.html - This page on top will say the app title and have a brief description of what the app does. Under that will be a text box where the user can list items to be compared. Under that should be two radio options: "Single voter" and "Multiple voters", if the user selects "Single voter" then nothing changes; if the user selects "Multiple voters" then a new text box appears with a prompt to enter all voters names. Under that are two buttons; one that says "Simple voting" and "Exact voting". Under the buttons are paragraphs explaining how each voting works: Simple voting - "Simple voting compare each item with only two other items. This is a faster way to vote but can have less accurate results. This should be used when voting on many items." Exact voting - "Exact voting compares each item with each other item. This leads to very accurate results but can take a very long time if you have many items. It is recommended to use this method if you are voting on 2 - 4 items."
