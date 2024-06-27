@@ -1,6 +1,6 @@
 General Overview:
 
-Create a web app that uses the ELO ranking system to compare different items to determine which item is best or has the highest score. The app will be called "ELO Simple Comparison" Front end will be html and backend will be python.
+Create a web app that uses the ELO ranking system to compare different items to determine which item is best or has the highest score. The app will be called "ELO Simple Comparison" Front end will be html and backend will be python. Please make it so this can be run locally or be run in docker with a yaml file that can be pasted into Portainer.
 
 Page breakdowns:
 
