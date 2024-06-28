@@ -1,0 +1,9 @@
+version: '3'
+services:
+  elo-comparison-app:
+    image: mckayc/elosimplecomparison:latest
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
