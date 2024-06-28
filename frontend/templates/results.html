@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Results</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Results</h1>
+        <ul>
+            {% for index, (item, score) in enumerate(ranking) %}
+                <li>{{ index }}{{ "st" if index == 1 else "nd" if index == 2 else "rd" if index == 3 else "th" }}: {{ item }} - {{ score }}</li>
+            {% endfor %}
+        </ul>
+        <div class="button-container">
+            <a href="/" class="button">Start Over</a>
+            <a href="/reset_votes" class="button">Recompare</a>
+        </div>
+    </div>
+</body>
+</html>

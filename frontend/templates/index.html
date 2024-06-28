@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>ELO Comparison</title>
+</head>
+<body>
+    <div class="container">
+        <h1>ELO Comparison</h1>
+        <p>This web application allows you to compare multiple items using the ELO ranking system. 
+        Enter at least three items you want to compare, and the app will help you determine the best one 
+        through a series of pairwise comparisons.</p>
+        <form action="/add_items" method="POST">
+            <label for="items">Enter items to compare (one per line):</label>
+            <textarea name="items" id="items" rows="10" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
