@@ -35,11 +35,15 @@ def compare():
     # Shuffle the items to randomize the order of comparisons
     random.shuffle(items)
 
+    # Calculate the total number of comparisons
+    num_total_compares = len(items) * (len(items) - 1) // 2
+    num_comparison = len(elo_system.matches)
+
     # Find a pair of items that haven't been compared yet
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
             if (items[i], items[j]) not in elo_system.matches and (items[j], items[i]) not in elo_system.matches:
-                return render_template('compare.html', item1=items[i], item2=items[j])
+                return render_template('compare.html', item1=items[i], item2=items[j], num_comparison=num_comparison, num_total_compares=num_total_compares)
 
     return redirect(url_for('results'))
 
