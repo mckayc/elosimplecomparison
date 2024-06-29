@@ -9,11 +9,13 @@ app.config['SESSION_TYPE'] = 'filesystem'
 
 Session(app)
 
+VERSION = "0.1.1"  # Define the version here
+
 @app.context_processor
 def utility_processor():
     def enumerate_function(seq):
         return enumerate(seq, start=1)
-    return dict(enumerate=enumerate_function)
+    return dict(enumerate=enumerate_function, version=VERSION)
 
 @app.route('/')
 def index():

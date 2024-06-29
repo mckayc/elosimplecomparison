@@ -100,3 +100,10 @@ li {
 .button:hover {
     background: #4cae4c;
 }
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.8em;
+}
