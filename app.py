@@ -8,7 +8,7 @@ app.secret_key = 'your_secret_key'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
-VERSION = "0.1.2b"  # Define the version here
+VERSION = "0.1.3"  # Define the version here
 
 elo_system = ELO()
 
@@ -23,7 +23,6 @@ def index():
     global elo_system
     elo_system = ELO()
     session.clear()  # Clear the session when starting over
-    print("Session cleared")
     return render_template('index.html')
 
 @app.route('/add_items', methods=['POST'])
@@ -33,7 +32,6 @@ def add_items():
         elo_system.add_item(item)
     session['items'] = items  # Store items in session
     session['matches'] = []  # Initialize matches in session
-    print("Items added:", items)
     return redirect(url_for('compare'))
 
 @app.route('/compare')
@@ -63,15 +61,17 @@ def submit_match():
     matches = session.get('matches', [])
     matches.append((winner, loser))
     session['matches'] = matches  # Update matches in session
-    print("Match submitted:", winner, "vs", loser)
 
     return jsonify(success=True)
 
 @app.route('/results')
 def results():
-    elo_system.calculate_elo()
-    ranking = elo_system.get_ranking()
-    print("ELO rankings:", ranking)
+    if 'ranking' not in session:
+        elo_system.calculate_elo()
+        ranking = elo_system.get_ranking()
+        session['ranking'] = ranking  # Store the ranking in session
+    else:
+        ranking = session['ranking']
     return render_template('results.html', ranking=ranking)
 
 @app.route('/reset_votes')
@@ -79,7 +79,7 @@ def reset_votes():
     global elo_system
     elo_system = ELO()  # Reset the ELO system
     session['matches'] = []  # Clear matches in session
-    print("Votes reset")
+    session.pop('ranking', None)  # Clear the stored ranking in session
     return redirect(url_for('compare'))
 
 if __name__ == '__main__':
