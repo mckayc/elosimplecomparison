@@ -6,10 +6,11 @@ import random
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 app.secret_key = 'your_secret_key'
 app.config['SESSION_TYPE'] = 'filesystem'
-
 Session(app)
 
-VERSION = "0.1.1"  # Define the version here
+VERSION = "0.1.2"  # Define the version here
+
+elo_system = ELO()
 
 @app.context_processor
 def utility_processor():
@@ -19,36 +20,35 @@ def utility_processor():
 
 @app.route('/')
 def index():
-    # Reset the ELO system for the session
-    session['elo_system'] = ELO()
+    global elo_system
+    elo_system = ELO()
+    session.clear()  # Clear the session when starting over
     return render_template('index.html')
 
 @app.route('/add_items', methods=['POST'])
 def add_items():
     items = request.form.get('items').splitlines()
     for item in items:
-        session['elo_system'].add_item(item)
+        elo_system.add_item(item)
+    session['items'] = items  # Store items in session
+    session['matches'] = []  # Initialize matches in session
     return redirect(url_for('compare'))
 
 @app.route('/compare')
 def compare():
-    elo_system = session.get('elo_system')
-    items = list(elo_system.items.keys())
+    items = session.get('items', [])
     if len(items) < 2:
         return redirect(url_for('index'))
 
     # Shuffle the items to randomize the order of comparisons
     random.shuffle(items)
 
-    # Calculate the total number of comparisons
-    num_total_compares = len(items) * (len(items) - 1) // 2
-    num_comparison = len(elo_system.matches)
-
     # Find a pair of items that haven't been compared yet
+    matches = session.get('matches', [])
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
-            if (items[i], items[j]) not in elo_system.matches and (items[j], items[i]) not in elo_system.matches:
-                return render_template('compare.html', item1=items[i], item2=items[j], num_comparison=num_comparison, num_total_compares=num_total_compares)
+            if (items[i], items[j]) not in matches and (items[j], items[i]) not in matches:
+                return render_template('compare.html', item1=items[i], item2=items[j], num_comparison=len(matches) + 1, num_total_compares=(len(items) * (len(items) - 1)) // 2)
 
     return redirect(url_for('results'))
 
@@ -56,19 +56,23 @@ def compare():
 def submit_match():
     winner = request.form['winner']
     loser = request.form['loser']
-    session['elo_system'].add_match(winner, loser)
+    elo_system.add_match(winner, loser)
+
+    matches = session.get('matches', [])
+    matches.append((winner, loser))
+    session['matches'] = matches  # Update matches in session
+
     return jsonify(success=True)
 
 @app.route('/results')
 def results():
-    elo_system = session.get('elo_system')
     elo_system.calculate_elo()
     ranking = elo_system.get_ranking()
     return render_template('results.html', ranking=ranking)
 
 @app.route('/reset_votes')
 def reset_votes():
-    session['elo_system'].matches = []
+    session['matches'] = []  # Clear matches in session
     return redirect(url_for('compare'))
 
 if __name__ == '__main__':
