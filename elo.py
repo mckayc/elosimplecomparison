@@ -1,5 +1,3 @@
-import pickle
-
 class ELO:
     def __init__(self, k=32):
         self.k = k
@@ -11,6 +9,11 @@ class ELO:
             self.items[item] = 1000
 
     def add_match(self, winner, loser):
+        # Initialize items if they are not already in the system
+        if winner not in self.items:
+            self.add_item(winner)
+        if loser not in self.items:
+            self.add_item(loser)
         self.matches.append((winner, loser))
 
     def calculate_elo(self):
@@ -26,9 +29,3 @@ class ELO:
 
     def get_ranking(self):
         return sorted(self.items.items(), key=lambda item: item[1], reverse=True)
-
-    def __getstate__(self):
-        return self.__dict__
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)
