@@ -8,7 +8,7 @@ app.secret_key = 'your_secret_key'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
-VERSION = "0.1.2"  # Define the version here
+VERSION = "0.1.2a"  # Define the version here
 
 elo_system = ELO()
 
@@ -72,6 +72,8 @@ def results():
 
 @app.route('/reset_votes')
 def reset_votes():
+    global elo_system
+    elo_system = ELO()  # Reset the ELO system
     session['matches'] = []  # Clear matches in session
     return redirect(url_for('compare'))
 
