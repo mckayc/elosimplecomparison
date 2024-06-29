@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask_session import Session
 from elo import ELO
 import random
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
+app.secret_key = 'your_secret_key'
+app.config['SESSION_TYPE'] = 'filesystem'
 
-elo_system = ELO()
+Session(app)
 
 @app.context_processor
 def utility_processor():
@@ -14,20 +17,20 @@ def utility_processor():
 
 @app.route('/')
 def index():
-    # Reset the ELO system
-    global elo_system
-    elo_system = ELO()
+    # Reset the ELO system for the session
+    session['elo_system'] = ELO()
     return render_template('index.html')
 
 @app.route('/add_items', methods=['POST'])
 def add_items():
     items = request.form.get('items').splitlines()
     for item in items:
-        elo_system.add_item(item)
+        session['elo_system'].add_item(item)
     return redirect(url_for('compare'))
 
 @app.route('/compare')
 def compare():
+    elo_system = session.get('elo_system')
     items = list(elo_system.items.keys())
     if len(items) < 2:
         return redirect(url_for('index'))
@@ -51,18 +54,19 @@ def compare():
 def submit_match():
     winner = request.form['winner']
     loser = request.form['loser']
-    elo_system.add_match(winner, loser)
+    session['elo_system'].add_match(winner, loser)
     return jsonify(success=True)
 
 @app.route('/results')
 def results():
+    elo_system = session.get('elo_system')
     elo_system.calculate_elo()
     ranking = elo_system.get_ranking()
     return render_template('results.html', ranking=ranking)
 
 @app.route('/reset_votes')
 def reset_votes():
-    elo_system.matches = []
+    session['elo_system'].matches = []
     return redirect(url_for('compare'))
 
 if __name__ == '__main__':

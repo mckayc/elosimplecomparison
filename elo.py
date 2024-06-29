@@ -1,4 +1,5 @@
-# elo.py
+import pickle
+
 class ELO:
     def __init__(self, k=32):
         self.k = k
@@ -25,3 +26,9 @@ class ELO:
 
     def get_ranking(self):
         return sorted(self.items.items(), key=lambda item: item[1], reverse=True)
+
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
