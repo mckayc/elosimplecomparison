@@ -1,9 +1,10 @@
-version: '3'
+version: '3.8'
+
 services:
-  elo-comparison-app:
-    image: mckayc/elosimplecomparison:latest
-    build: .
+  web:
+    image: mckayc/elosimplecomparison:dev
+    container_name: elosimplecomparison_dev
     ports:
       - "5000:5000"
     environment:
-      - FLASK_ENV=production
+      - FLASK_ENV=development
