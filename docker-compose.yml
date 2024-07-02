@@ -4,22 +4,26 @@ services:
   web:
     image: mckayc/elosimplecomparison:dev
     container_name: elocompare
-    build: .
+    restart: unless-stopped
     ports:
       - "5000:5000"
+    environment:
+      FLASK_APP: elocompare/app.py
     depends_on:
       - db
-    restart: unless-stopped
+
   db:
-    image: mariadb:latest
-    container_name: mariadb
+    image: mariadb:10.5
+    container_name: elocompare_db
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: elocompare
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_USER: elocompareuser
+      MYSQL_PASSWORD: elocomparepass
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
-    restart: unless-stopped
+      - db_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  db_data:
