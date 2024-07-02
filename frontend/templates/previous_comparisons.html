@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Previous Comparisons</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Previous Comparisons</h1>
+        <ul>
+            {% for comparison in comparisons %}
+                <li><a href="{{ url_for('results', comparison_id=comparison.id) }}">{{ comparison.comparison_name }} by {{ comparison.username }} at {{ comparison.timestamp }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

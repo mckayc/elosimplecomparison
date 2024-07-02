@@ -1,86 +1,111 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
-from flask_session import Session
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from elo import ELO
 import random
+from datetime import datetime
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
-app.secret_key = 'your_secret_key'
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
 
-VERSION = "0.1.3"  # Define the version here
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///elo_comparisons.db'
+db = SQLAlchemy(app)
 
 elo_system = ELO()
+
+class Comparison(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False)
+    comparison_name = db.Column(db.String(100), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    items = db.Column(db.Text, nullable=False)
+    matches = db.Column(db.Text, nullable=True)
+    results = db.Column(db.Text, nullable=True)
+
+db.create_all()
 
 @app.context_processor
 def utility_processor():
     def enumerate_function(seq):
         return enumerate(seq, start=1)
-    return dict(enumerate=enumerate_function, version=VERSION)
+    return dict(enumerate=enumerate_function)
 
 @app.route('/')
 def index():
-    global elo_system
-    elo_system = ELO()
-    session.clear()  # Clear the session when starting over
     return render_template('index.html')
 
 @app.route('/add_items', methods=['POST'])
 def add_items():
+    global elo_system
+    elo_system = ELO()
+    username = request.form.get('username')
+    comparison_name = request.form.get('comparison_name')
     items = request.form.get('items').splitlines()
+
     for item in items:
         elo_system.add_item(item)
-    session['items'] = items  # Store items in session
-    session['matches'] = []  # Initialize matches in session
-    return redirect(url_for('compare'))
 
-@app.route('/compare')
-def compare():
-    items = session.get('items', [])
+    comparison = Comparison(username=username, comparison_name=comparison_name, items='\n'.join(items))
+    db.session.add(comparison)
+    db.session.commit()
+
+    return redirect(url_for('compare', comparison_id=comparison.id))
+
+@app.route('/compare/<int:comparison_id>')
+def compare(comparison_id):
+    comparison = Comparison.query.get_or_404(comparison_id)
+    items = list(elo_system.items.keys())
+
     if len(items) < 2:
         return redirect(url_for('index'))
 
-    # Shuffle the items to randomize the order of comparisons
     random.shuffle(items)
 
-    # Find a pair of items that haven't been compared yet
-    matches = session.get('matches', [])
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
-            if (items[i], items[j]) not in matches and (items[j], items[i]) not in matches:
-                return render_template('compare.html', item1=items[i], item2=items[j], num_comparison=len(matches) + 1, num_total_compares=(len(items) * (len(items) - 1)) // 2)
+            if (items[i], items[j]) not in elo_system.matches and (items[j], items[i]) not in elo_system.matches:
+                return render_template('compare.html', item1=items[i], item2=items[j], comparison_id=comparison_id)
 
-    return redirect(url_for('results'))
+    return redirect(url_for('results', comparison_id=comparison_id))
 
 @app.route('/submit_match', methods=['POST'])
 def submit_match():
+    global elo_system
     winner = request.form['winner']
     loser = request.form['loser']
-    elo_system.add_match(winner, loser)
+    comparison_id = request.form['comparison_id']
+    comparison = Comparison.query.get_or_404(comparison_id)
 
-    matches = session.get('matches', [])
-    matches.append((winner, loser))
-    session['matches'] = matches  # Update matches in session
+    elo_system.add_match(winner, loser)
+    comparison.matches = str(elo_system.matches)
+    db.session.commit()
 
     return jsonify(success=True)
 
-@app.route('/results')
-def results():
-    if 'ranking' not in session:
-        elo_system.calculate_elo()
-        ranking = elo_system.get_ranking()
-        session['ranking'] = ranking  # Store the ranking in session
-    else:
-        ranking = session['ranking']
-    return render_template('results.html', ranking=ranking)
-
-@app.route('/reset_votes')
-def reset_votes():
+@app.route('/results/<int:comparison_id>')
+def results(comparison_id):
     global elo_system
-    elo_system = ELO()  # Reset the ELO system
-    session['matches'] = []  # Clear matches in session
-    session.pop('ranking', None)  # Clear the stored ranking in session
-    return redirect(url_for('compare'))
+    comparison = Comparison.query.get_or_404(comparison_id)
+    elo_system.calculate_elo()
+    ranking = elo_system.get_ranking()
+
+    comparison.results = str(ranking)
+    db.session.commit()
+
+    return render_template('results.html', ranking=ranking, comparison_id=comparison_id)
+
+@app.route('/previous_comparisons')
+def previous_comparisons():
+    comparisons = Comparison.query.order_by(Comparison.timestamp.desc()).all()
+    return render_template('previous_comparisons.html', comparisons=comparisons)
+
+@app.route('/reset_votes/<int:comparison_id>')
+def reset_votes(comparison_id):
+    global elo_system
+    elo_system.matches = []
+    comparison = Comparison.query.get_or_404(comparison_id)
+    comparison.matches = ''
+    db.session.commit()
+
+    return redirect(url_for('compare', comparison_id=comparison_id))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

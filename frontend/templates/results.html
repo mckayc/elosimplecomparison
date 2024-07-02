@@ -16,11 +16,14 @@
         </ul>
         <div class="button-container">
             <a href="/" class="button">Start Over</a>
-            <a href="/reset_votes" class="button">Recompare</a>
+            <a href="{{ url_for('reset_votes', comparison_id=comparison_id) }}" class="button">Recompare</a>
         </div>
+        <h2>Previous Comparisons</h2>
+        <ul>
+            {% for comparison in comparisons %}
+                <li><a href="{{ url_for('results', comparison_id=comparison.id) }}">{{ comparison.comparison_name }} by {{ comparison.username }} at {{ comparison.timestamp }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
-    <footer>
-        <p>Version {{ version }}</p>
-    </footer>
 </body>
 </html>

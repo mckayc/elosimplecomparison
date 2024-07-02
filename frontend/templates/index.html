@@ -13,13 +13,16 @@
         Enter at least three items you want to compare, and the app will help you determine the best one 
         through a series of pairwise comparisons.</p>
         <form action="/add_items" method="POST">
+            <label for="username">Your Name:</label>
+            <input type="text" name="username" id="username" required>
+            
+            <label for="comparison_name">Comparison Name:</label>
+            <input type="text" name="comparison_name" id="comparison_name" required>
+
             <label for="items">Enter items to compare (one per line):</label>
             <textarea name="items" id="items" rows="10" required></textarea>
             <button type="submit">Submit</button>
         </form>
     </div>
-    <footer>
-        <p>Version {{ version }}</p>
-    </footer>
 </body>
 </html>

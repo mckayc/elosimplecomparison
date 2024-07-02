@@ -11,13 +11,10 @@
     <div class="container">
         <h1>Which Item is Better?</h1>
         <div id="comparison-container">
-            <button onclick="submitMatch('{{ item1 }}', '{{ item2 }}')">{{ item1 }}</button>
-            <button onclick="submitMatch('{{ item2 }}', '{{ item1 }}')">{{ item2 }}</button>
+            <button onclick="submitMatch('{{ item1 }}', '{{ item2 }}', {{ comparison_id }})">{{ item1 }}</button>
+            <button onclick="submitMatch('{{ item2 }}', '{{ item1 }}', {{ comparison_id }})">{{ item2 }}</button>
         </div>
         <p>{{ num_comparison }} of {{ num_total_compares }}</p>
     </div>
-    <footer>
-        <p>Version {{ version }}</p>
-    </footer>
 </body>
 </html>
