@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <title>Compare Items - Choose the Better Item</title>
+    <title>ELO Simple Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Which Item is Better?</h1>
-        <div id="comparison-container">
-            <button onclick="submitMatch('{{ item1 }}', '{{ item2 }}', {{ comparison_id }})">{{ item1 }}</button>
-            <button onclick="submitMatch('{{ item2 }}', '{{ item1 }}', {{ comparison_id }})">{{ item2 }}</button>
-        </div>
-        <p>{{ num_comparison }} of {{ num_total_compares }}</p>
-    </div>
+    <!-- Your existing HTML code here -->
+    <footer>
+        <small>Version: {{ version }}</small>
+    </footer>
 </body>
 </html>

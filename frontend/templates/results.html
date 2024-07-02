@@ -3,27 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Results</title>
+    <title>ELO Simple Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Results</h1>
-        <ul>
-            {% for index, (item, score) in enumerate(ranking) %}
-                <li>{{ index }}{{ "st" if index == 1 else "nd" if index == 2 else "rd" if index == 3 else "th" }}: {{ item }} - {{ score }}</li>
-            {% endfor %}
-        </ul>
-        <div class="button-container">
-            <a href="/" class="button">Start Over</a>
-            <a href="{{ url_for('reset_votes', comparison_id=comparison_id) }}" class="button">Recompare</a>
-        </div>
-        <h2>Previous Comparisons</h2>
-        <ul>
-            {% for comparison in comparisons %}
-                <li><a href="{{ url_for('results', comparison_id=comparison.id) }}">{{ comparison.comparison_name }} by {{ comparison.username }} at {{ comparison.timestamp }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
+    <!-- Your existing HTML code here -->
+    <footer>
+        <small>Version: {{ version }}</small>
+    </footer>
 </body>
 </html>

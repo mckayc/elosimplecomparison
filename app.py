@@ -10,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///elo_comparisons.db'
 db = SQLAlchemy(app)
 
 elo_system = ELO()
+version = "0.1.1.dev"
 
 class Comparison(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,17 +21,18 @@ class Comparison(db.Model):
     matches = db.Column(db.Text, nullable=True)
     results = db.Column(db.Text, nullable=True)
 
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 @app.context_processor
 def utility_processor():
     def enumerate_function(seq):
         return enumerate(seq, start=1)
-    return dict(enumerate=enumerate_function)
+    return dict(enumerate=enumerate_function, version=version)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', version=version)
 
 @app.route('/add_items', methods=['POST'])
 def add_items():
@@ -47,7 +49,7 @@ def add_items():
     db.session.add(comparison)
     db.session.commit()
 
-    return redirect(url_for('compare', comparison_id=comparison.id))
+    return redirect(url_for('compare', comparison_id=comparison.id, version=version))
 
 @app.route('/compare/<int:comparison_id>')
 def compare(comparison_id):
@@ -55,16 +57,16 @@ def compare(comparison_id):
     items = list(elo_system.items.keys())
 
     if len(items) < 2:
-        return redirect(url_for('index'))
+        return redirect(url_for('index', version=version))
 
     random.shuffle(items)
 
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
             if (items[i], items[j]) not in elo_system.matches and (items[j], items[i]) not in elo_system.matches:
-                return render_template('compare.html', item1=items[i], item2=items[j], comparison_id=comparison_id)
+                return render_template('compare.html', item1=items[i], item2=items[j], comparison_id=comparison_id, version=version)
 
-    return redirect(url_for('results', comparison_id=comparison_id))
+    return redirect(url_for('results', comparison_id=comparison_id, version=version))
 
 @app.route('/submit_match', methods=['POST'])
 def submit_match():
@@ -90,12 +92,12 @@ def results(comparison_id):
     comparison.results = str(ranking)
     db.session.commit()
 
-    return render_template('results.html', ranking=ranking, comparison_id=comparison_id)
+    return render_template('results.html', ranking=ranking, comparison_id=comparison_id, version=version)
 
 @app.route('/previous_comparisons')
 def previous_comparisons():
     comparisons = Comparison.query.order_by(Comparison.timestamp.desc()).all()
-    return render_template('previous_comparisons.html', comparisons=comparisons)
+    return render_template('previous_comparisons.html', comparisons=comparisons, version=version)
 
 @app.route('/reset_votes/<int:comparison_id>')
 def reset_votes(comparison_id):
@@ -105,7 +107,7 @@ def reset_votes(comparison_id):
     comparison.matches = ''
     db.session.commit()
 
-    return redirect(url_for('compare', comparison_id=comparison_id))
+    return redirect(url_for('compare', comparison_id=comparison_id, version=version))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
