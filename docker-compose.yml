@@ -13,12 +13,6 @@ services:
     volumes:
       - .:/app
       - db-data:/app/elo_comparisons.db
-    command: flask run --host=0.0.0.0
-
-  db:
-    image: sqlite
-    volumes:
-      - db-data:/var/lib/sqlite3
 
 volumes:
   db-data:
