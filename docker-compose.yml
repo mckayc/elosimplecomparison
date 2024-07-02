@@ -8,16 +8,17 @@ services:
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
+      - DATABASE_URL=mysql://username:password@db:3306/db_name
     depends_on:
       - db
     restart: unless-stopped
 
   db:
-    image: "sqlite"
-    volumes:
-      - ./data:/data
+    image: mariadb:latest
     environment:
-      - SQLITE_DATABASE=comparison.db
-
-volumes:
-  data:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=db_name
+      - MYSQL_USER=username
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./data/mysql:/var/lib/mysql
