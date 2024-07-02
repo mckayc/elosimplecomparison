@@ -1,18 +1,23 @@
 version: '3.8'
 
 services:
-  elosimplecomparison:
+  web:
     image: mckayc/elosimplecomparison:dev
-    container_name: elosimplecomparison_dev
-    build: .
     ports:
       - "5000:5000"
     environment:
+      - FLASK_APP=app.py
       - FLASK_ENV=development
-      - DATABASE_URI=sqlite:///elo_comparisons.db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: "sqlite"
     volumes:
-      - .:/app
-      - db-data:/app/elo_comparisons.db
+      - ./data:/data
+    environment:
+      - SQLITE_DATABASE=comparison.db
 
 volumes:
-  db-data:
+  data:
