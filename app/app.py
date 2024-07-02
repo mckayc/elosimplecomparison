@@ -1,20 +1,17 @@
-# app.py
-from flask import Flask, render_template, request, jsonify
-import sqlite3
+from flask import Flask, render_template
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    
+    # Example route
+    @app.route('/')
+    def index():
+        return render_template('index.html')  # Example template rendering
+    
+    return app
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/compare')
-def compare():
-    return render_template('compare.html')
-
-@app.route('/results')
-def results():
-    return render_template('results.html')
+# Create the Flask app instance
+app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True, host='0.0.0.0')
