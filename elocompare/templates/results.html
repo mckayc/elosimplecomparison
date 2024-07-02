@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Results</h1>
+        <ul>
+            {% for item in items %}
+            <li>{{ loop.index }}. {{ item.name }} - {{ item.elo_rating }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/">Start Over</a>
+    </div>
+</body>
+</html>

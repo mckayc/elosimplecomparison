@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Which item do you prefer?</h1>
+        <form method="post">
+            <input type="hidden" name="item1" value="{{ item1 }}">
+            <input type="hidden" name="item2" value="{{ item2 }}">
+            <button type="submit" name="winner" value="{{ item1 }}">{{ item1 }}</button>
+            <button type="submit" name="winner" value="{{ item2 }}">{{ item2 }}</button>
+        </form>
+    </div>
+</body>
+</html>
