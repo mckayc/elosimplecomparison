@@ -1,18 +1,37 @@
 version: '3.8'
 
 services:
-  elosimplecomparison:
+  backend:
     image: mckayc/elosimplecomparison:dev
     container_name: elocompare
     restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
-      - FLASK_ENV=development
-      - DATABASE_URI=sqlite:///elo_comparisons.db
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=elocompare
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: elocompare
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
     volumes:
-      - .:/app
-      - db-data:/app/elo_comparisons.db
+      - db_data:/var/lib/mysql
 
 volumes:
   db_data:
