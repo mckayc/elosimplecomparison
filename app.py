@@ -89,7 +89,7 @@ def next_comparison():
     if len(pairs) > 0:
         random.shuffle(pairs)
         
-        item1_id, item2_id = pairs[0][0], pairs[0][1]
+        item1_id, item2_id = pairs[0][0][0], pairs[0][1][0]  # Adjust here
         
         return redirect(url_for('do_comparison', item1_id=item1_id, item2_id=item2_id))
     else:
