@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: mckayc/elocompare:dev
+    image: mckayc/elosimplecomparison:dev
     container_name: elocompare
     restart: unless-stopped
     ports:
