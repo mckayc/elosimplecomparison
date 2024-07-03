@@ -27,11 +27,11 @@
         <div class="card">
             <h3>Comparison Results</h3>
             
-            {% if timestamps %}
             <h4>Past Comparisons:</h4>
+            {% if timestamps %}
             <ul>
-                {% for ts in timestamps %}
-                <li><a href="{{ url_for('results', timestamp=ts[0]) }}">Results for {{ ts[0] }}</a></li>
+                {% for ts, items in timestamps[:10] %}
+                <li><a href="{{ url_for('results', timestamp=ts) }}">Results for {{ ts }}</a> ({{ items }})</li>
                 {% endfor %}
             </ul>
             <hr>
@@ -48,17 +48,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in ranked_items %}
+                    {% for rank, item in ranked_items %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ item[1] }}</td> {# Assuming item[1] is the name of the item #}
-                        <td>{{ item[2] }}</td> {# Assuming item[2] is the score of the item #}
-                        <td>{{ item[3] }}</td> {# Assuming item[3] is the wins of the item #}
-                        <td>{{ item[4] }}</td> {# Assuming item[4] is the losses of the item #}
+                        <td>{{ rank + 1 }}</td>
+                        <td>{{ item[1] }}</td>
+                        <td>{{ item[2] }}</td>
+                        <td>{{ item[3] }}</td>
+                        <td>{{ item[4] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+            <div>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Start Over</a>
+                <a href="{{ url_for('compare') }}" class="btn btn-primary ml-2">Compare Again</a>
+            </div>
         </div>
     </div>
 </body>
