@@ -1,8 +1,8 @@
 # app.py
 
 from flask import Flask, render_template, request, redirect, url_for
-from datetime import datetime
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 DATABASE = 'elo.db'
@@ -34,6 +34,20 @@ def initialize_database():
         ''')
         conn.commit()
 
+# Route to display index page
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        item_names = request.form.get('items', '').splitlines()
+        if item_names:
+            with sqlite3.connect(DATABASE) as conn:
+                cursor = conn.cursor()
+                for name in item_names:
+                    cursor.execute('INSERT OR IGNORE INTO items (name) VALUES (?)', (name,))
+                conn.commit()
+        return redirect(url_for('compare'))
+    return render_template('index.html')
+
 # Route to display compare page
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
@@ -63,6 +77,22 @@ def compare():
             conn.commit()
 
         return redirect(url_for('compare'))
+
+# Route to display results page
+@app.route('/results')
+def results():
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT c.timestamp, i1.name, i2.name
+            FROM comparisons c
+            INNER JOIN items i1 ON c.item1_id = i1.id
+            INNER JOIN items i2 ON c.item2_id = i2.id
+            ORDER BY c.timestamp DESC
+            LIMIT 10
+        ''')
+        timestamps = cursor.fetchall()
+    return render_template('results.html', timestamps=timestamps)
 
 if __name__ == '__main__':
     initialize_database()
