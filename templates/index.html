@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ELO Simple Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to ELO Simple Comparison!</h1>
+        <form action="{{ url_for('compare') }}" method="POST">
+            <label for="items">Enter items to compare (one per line):</label><br>
+            <textarea id="items" name="items" rows="4" cols="50"></textarea><br><br>
+            <button type="submit">Start Comparing</button>
+        </form>
+    </div>
+</body>
+</html>

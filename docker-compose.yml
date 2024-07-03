@@ -1,23 +1,8 @@
 version: '3'
 services:
   elocompare:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: mckayc/elosimplecomparison:dev
     container_name: elocompare
     restart: unless-stopped
     ports:
-      - "80:80"
-    depends_on:
-      - flaskapp
-
-  flaskapp:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: flaskapp
-    restart: unless-stopped
-    ports:
       - "5000:5000"
-    volumes:
-      - ./backend:/app

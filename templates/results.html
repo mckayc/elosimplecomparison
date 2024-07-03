@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Final Rankings:</h1>
+        <ol>
+            {% for item in ranked_items %}
+            <li>{{ item[1] }} - Score: {{ item[2] }} - Wins: {{ item[3] }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+</body>
+</html>
