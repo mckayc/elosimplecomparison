@@ -1,56 +1,24 @@
+<!-- compare.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare Items</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <style>
-        body {
-            background-color: #343a40; /* Dark theme background color */
-            color: #ffffff; /* Text color */
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-        }
-        .card {
-            background-color: #454d55; /* Card background color */
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h3>Compare Items</h3>
-            <p>Comparison Count: <span id="comparisonCount">0</span></p>
-            
-            <form action="/compare" method="POST">
-                {% if item1 and item2 %}
-                <h4>Which item do you prefer?</h4>
-                <p>{{ item1[1] }} vs {{ item2[1] }}</p>
+    <h1>Compare Items</h1>
+    <div>
+        {% if item1 and item2 %}
+            <form method="post" action="/compare">
                 <input type="hidden" name="item1_id" value="{{ item1[0] }}">
                 <input type="hidden" name="item2_id" value="{{ item2[0] }}">
-                {% endif %}
-                <button type="submit" class="btn btn-primary">Choose {{ item1[1] }}</button>
-                <button type="submit" class="btn btn-primary ml-2">Choose {{ item2[1] }}</button>
+                <button type="submit" name="winner_id" value="{{ item1[0] }}">Choose {{ item1[1] }}</button>
+                <button type="submit" name="winner_id" value="{{ item2[0] }}">Choose {{ item2[1] }}</button>
             </form>
-        </div>
+        {% else %}
+            <p>Not enough items to compare.</p>
+        {% endif %}
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the initial comparison count from the server
-            fetch('/get_comparison_count')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('comparisonCount').innerText = data.comparison_count;
-                })
-                .catch(error => console.error('Error fetching comparison count:', error));
-        });
-    </script>
 </body>
 </html>
