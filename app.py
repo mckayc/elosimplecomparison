@@ -53,7 +53,18 @@ def do_comparison(item1_id, item2_id):
         
         update_elo(item1_id, item2_id, winner_id)
         
-        # Redirect to next comparison or results page
+        # Check if all comparisons are done, redirect to results if true
+        c.execute("SELECT COUNT(id) FROM items")
+        num_items = c.fetchone()[0]
+        total_comparisons = calculate_total_comparisons(num_items)
+        
+        c.execute("SELECT COUNT(*) FROM (SELECT DISTINCT a.id, b.id FROM items a, items b WHERE a.id != b.id) AS pairs")
+        current_comparison = c.fetchone()[0]
+        
+        if current_comparison >= total_comparisons:
+            return redirect(url_for('results'))
+        
+        # Redirect to next comparison if more are needed
         return redirect(url_for('next_comparison'))
     
     c.execute("SELECT name FROM items WHERE id=?", (item1_id,))
@@ -67,7 +78,10 @@ def do_comparison(item1_id, item2_id):
     
     # Calculate total comparisons and current comparison count
     total_comparisons = calculate_total_comparisons(num_items)
-    current_comparison = total_comparisons - len(list(itertools.combinations(range(1, num_items + 1), 2))) + 1
+    
+    # Count completed comparisons
+    c.execute("SELECT COUNT(*) FROM (SELECT DISTINCT a.id, b.id FROM items a, items b WHERE a.id != b.id) AS pairs")
+    current_comparison = c.fetchone()[0] + 1
     
     return render_template('compare.html', item1_id=item1_id, item2_id=item2_id,
                            item1_name=item1_name, item2_name=item2_name,
