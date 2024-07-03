@@ -28,8 +28,12 @@ def index():
 def compare():
     items = request.form['items'].strip().split('\n')
     
+    # Clear existing items before adding new ones for a fresh session
+    c.execute("DELETE FROM items")
+    conn.commit()
+    
     for item in items:
-        c.execute("INSERT OR IGNORE INTO items (name) VALUES (?)", (item,))
+        c.execute("INSERT INTO items (name) VALUES (?)", (item,))
     conn.commit()
     
     return redirect(url_for('next_comparison'))
@@ -89,7 +93,7 @@ def next_comparison():
     if len(pairs) > 0:
         random.shuffle(pairs)
         
-        item1_id, item2_id = pairs[0][0][0], pairs[0][1][0]  # Adjust here
+        item1_id, item2_id = pairs[0][0][0], pairs[0][1][0]
         
         return redirect(url_for('do_comparison', item1_id=item1_id, item2_id=item2_id))
     else:
