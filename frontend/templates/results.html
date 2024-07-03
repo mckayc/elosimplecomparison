@@ -3,32 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>ELO Simple Comparison - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Results for "{{ title }}"</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Item</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.score }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button onclick="location.href='/'">Start Over</button>
-        <button onclick="location.href='/history'">View History</button>
+        <h1>Results</h1>
+        <div class="results-list">
+            {% for index, item in enumerate(items) %}
+            <div class="result-item">
+                <h2>{{ index+1 }}. {{ item[1] }}</h2>
+                <p>Score: {{ item[2] }}</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

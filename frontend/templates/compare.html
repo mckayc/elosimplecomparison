@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compare Items</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>ELO Simple Comparison - Compare Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Compare Items</h1>
-        <form id="compare-form">
-            <input type="hidden" name="comparison_id" value="{{ comparison_id }}">
-            <input type="hidden" name="item1_id" value="{{ item1.id }}">
-            <input type="hidden" name="item2_id" value="{{ item2.id }}">
-            <button type="submit" name="winner_id" value="{{ item1.id }}">{{ item1.name }}</button>
-            <button type="submit" name="winner_id" value="{{ item2.id }}">{{ item2.name }}</button>
-        </form>
+        <h1>Compare</h1>
+        <div class="compare-box">
+            <h2>{{ item1[1] }}</h2>
+            <h3>VS</h3>
+            <h2>{{ item2[1] }}</h2>
+            <form action="{{ url_for('vote', winner=item1[0], loser=item2[0]) }}" method="POST">
+                <button type="submit">{{ item1[1] }} is Better</button>
+            </form>
+            <form action="{{ url_for('vote', winner=item2[0], loser=item1[0]) }}" method="POST">
+                <button type="submit">{{ item2[1] }} is Better</button>
+            </form>
+        </div>
     </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -1,13 +1,14 @@
-def rate_1vs1(ra, rb, result):
-    K = 32
-    ea = 1 / (1 + 10 ** ((rb - ra) / 400))
-    eb = 1 / (1 + 10 ** ((ra - rb) / 400))
+class EloRank:
+    def __init__(self, k_factor=32):
+        self.k_factor = k_factor
 
-    if result:
-        ra_new = ra + K * (1 - ea)
-        rb_new = rb + K * (0 - eb)
-    else:
-        ra_new = ra + K * (0 - ea)
-        rb_new = rb + K * (1 - eb)
+    def expected_result(self, rating_a, rating_b):
+        expect_a = 1 / (1 + 10 ** ((rating_b - rating_a) / 400))
+        expect_b = 1 / (1 + 10 ** ((rating_a - rating_b) / 400))
+        return expect_a, expect_b
 
-    return ra_new, rb_new
+    def rate_1vs1(self, rating_a, rating_b):
+        expect_a, expect_b = self.expected_result(rating_a, rating_b)
+        new_rating_a = rating_a + self.k_factor * (1 - expect_a)
+        new_rating_b = rating_b + self.k_factor * (0 - expect_b)
+        return new_rating_a, new_rating_b

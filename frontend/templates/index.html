@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELO Comparison</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>ELO Simple Comparison - Input Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>ELO Simple Comparison</h1>
-        <form action="{{ url_for('compare') }}" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="text" name="title" placeholder="Title" required>
-            <textarea name="items" rows="10" placeholder="Enter items, one per line" required></textarea>
-            <button type="submit">Start Comparison</button>
+        <h1>Enter Items to Compare</h1>
+        <form action="{{ url_for('add_items') }}" method="POST">
+            <textarea name="items" rows="10" placeholder="Enter each item on a new line"></textarea>
+            <button type="submit">Start Comparing</button>
         </form>
     </div>
 </body>
