@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELO Simple Comparison</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Compare Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- Your existing HTML code here -->
-    <footer>
-        <small>Version: {{ version }}</small>
-    </footer>
+    <div class="container">
+        <h1>Compare Items</h1>
+        <form id="compare-form">
+            <input type="hidden" name="comparison_id" value="{{ comparison_id }}">
+            <input type="hidden" name="item1_id" value="{{ item1.id }}">
+            <input type="hidden" name="item2_id" value="{{ item2.id }}">
+            <button type="submit" name="winner_id" value="{{ item1.id }}">{{ item1.name }}</button>
+            <button type="submit" name="winner_id" value="{{ item2.id }}">{{ item2.name }}</button>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
