@@ -1,11 +1,8 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: mckayc/elosimplecomparison:dev
+  app:
+    image: mckayc/elocompare:dev
     container_name: elocompare
     restart: unless-stopped
     ports:
@@ -17,13 +14,6 @@ services:
       - MYSQL_PASSWORD=password
     depends_on:
       - db
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
 
   db:
     image: mariadb:latest
