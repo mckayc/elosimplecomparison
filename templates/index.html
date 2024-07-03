@@ -1,17 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELO Simple Comparison</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #343a40; /* Dark theme background color */
+            color: #ffffff; /* Text color */
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .card {
+            background-color: #454d55; /* Card background color */
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to ELO Simple Comparison!</h1>
-        <form action="{{ url_for('compare') }}" method="POST">
-            <label for="items">Enter items to compare (one per line):</label><br>
-            <textarea id="items" name="items" rows="4" cols="50"></textarea><br><br>
-            <button type="submit">Start Comparing</button>
-        </form>
+        <div class="card">
+            <h3>Add Items to Compare</h3>
+            <form action="/compare" method="POST">
+                <div class="form-group">
+                    <label for="items">Enter items (one per line):</label>
+                    <textarea class="form-control" id="items" name="items" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

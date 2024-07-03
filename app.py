@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import itertools
 import random
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -14,6 +15,7 @@ c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS items (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
+                timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
                 score INTEGER DEFAULT 1000,
                 wins INTEGER DEFAULT 0,
                 losses INTEGER DEFAULT 0
@@ -38,8 +40,10 @@ def compare():
     c.execute("DELETE FROM items")
     conn.commit()
     
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     for item in items:
-        c.execute("INSERT INTO items (name) VALUES (?)", (item,))
+        c.execute("INSERT INTO items (name, timestamp) VALUES (?, ?)", (item, timestamp))
     conn.commit()
     
     # Redirect to first comparison
@@ -62,7 +66,7 @@ def do_comparison(item1_id, item2_id):
         current_comparison = c.fetchone()[0]
         
         if current_comparison >= total_comparisons:
-            return redirect(url_for('results'))
+            return redirect(url_for('results', timestamp=request.args.get('timestamp')))
         
         # Redirect to next comparison if more are needed
         return redirect(url_for('next_comparison'))
@@ -132,10 +136,20 @@ def next_comparison():
 
 @app.route('/results')
 def results():
-    c.execute("SELECT id, name, score, wins FROM items ORDER BY score DESC")
+    timestamp = request.args.get('timestamp')
+    
+    if timestamp:
+        c.execute("SELECT id, name, score, wins FROM items WHERE timestamp=?", (timestamp,))
+    else:
+        c.execute("SELECT id, name, score, wins FROM items ORDER BY score DESC")
+    
     ranked_items = c.fetchall()
     
-    return render_template('results.html', ranked_items=ranked_items)
+    # Fetch timestamps and items for history links
+    c.execute("SELECT DISTINCT timestamp FROM items ORDER BY timestamp DESC")
+    timestamps = c.fetchall()
+    
+    return render_template('results.html', ranked_items=ranked_items, timestamps=timestamps)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

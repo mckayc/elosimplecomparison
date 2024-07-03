@@ -1,17 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparison Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #343a40; /* Dark theme background color */
+            color: #ffffff; /* Text color */
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .card {
+            background-color: #454d55; /* Card background color */
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Final Rankings:</h1>
-        <ol>
-            {% for item in ranked_items %}
-            <li>{{ item[1] }} - Score: {{ item[2] }} - Wins: {{ item[3] }}</li>
-            {% endfor %}
-        </ol>
+        <div class="card">
+            <h3>Comparison Results</h3>
+            
+            {% if timestamps %}
+            <h4>Past Comparisons:</h4>
+            <ul>
+                {% for ts in timestamps %}
+                <li><a href="{{ url_for('results', timestamp=ts[0]) }}">Results for {{ ts[0] }}</a></li>
+                {% endfor %}
+            </ul>
+            <hr>
+            {% endif %}
+            
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rank, item in ranked_items %}
+                    <tr>
+                        <td>{{ rank + 1 }}</td>
+                        <td>{{ item[1] }}</td>
+                        <td>{{ item[2] }}</td>
+                        <td>{{ item[3] }}</td>
+                        <td>{{ item[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
