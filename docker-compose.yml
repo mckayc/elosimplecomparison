@@ -12,11 +12,10 @@ services:
       - flaskapp
 
   flaskapp:
-    image: python:3.9
-    container_name: flaskapp
     build:
       context: ./backend
-    command: python3 app.py
+      dockerfile: Dockerfile
+    container_name: flaskapp
     restart: unless-stopped
     ports:
       - "5000:5000"
