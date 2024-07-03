@@ -20,6 +20,12 @@ c.execute('''CREATE TABLE IF NOT EXISTS items (
             )''')
 conn.commit()
 
+# Function to calculate total number of comparisons
+def calculate_total_comparisons(num_items):
+    if num_items < 2:
+        return 0
+    return int(num_items * (num_items - 1) / 2)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -36,6 +42,7 @@ def compare():
         c.execute("INSERT INTO items (name) VALUES (?)", (item,))
     conn.commit()
     
+    # Redirect to first comparison
     return redirect(url_for('next_comparison'))
 
 @app.route('/compare/<int:item1_id>/<int:item2_id>', methods=['GET', 'POST'])
@@ -46,6 +53,7 @@ def do_comparison(item1_id, item2_id):
         
         update_elo(item1_id, item2_id, winner_id)
         
+        # Redirect to next comparison or results page
         return redirect(url_for('next_comparison'))
     
     c.execute("SELECT name FROM items WHERE id=?", (item1_id,))
@@ -53,8 +61,17 @@ def do_comparison(item1_id, item2_id):
     c.execute("SELECT name FROM items WHERE id=?", (item2_id,))
     item2_name = c.fetchone()[0]
     
+    # Get number of items for counter
+    c.execute("SELECT COUNT(id) FROM items")
+    num_items = c.fetchone()[0]
+    
+    # Calculate total comparisons and current comparison count
+    total_comparisons = calculate_total_comparisons(num_items)
+    current_comparison = total_comparisons - len(list(itertools.combinations(range(1, num_items + 1), 2))) + 1
+    
     return render_template('compare.html', item1_id=item1_id, item2_id=item2_id,
-                           item1_name=item1_name, item2_name=item2_name)
+                           item1_name=item1_name, item2_name=item2_name,
+                           current_comparison=current_comparison, total_comparisons=total_comparisons)
 
 def update_elo(item1_id, item2_id, winner_id):
     c.execute("SELECT score FROM items WHERE id=?", (item1_id,))

@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare Items</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #343a40; /* Dark theme background color */
+            color: #ffffff; /* Text color */
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .card {
+            background-color: #454d55; /* Card background color */
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .counter {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Compare:</h1>
-        <form action="{{ url_for('do_comparison', item1_id=item1_id, item2_id=item2_id) }}" method="POST">
-            <p>{{ item1_name }} vs {{ item2_name }}</p>
-            <input type="hidden" name="winner" value="{{ item1_id }}">
-            <input type="hidden" name="loser" value="{{ item2_id }}">
-            <button type="submit">{{ item1_name }}</button>
-            <button type="submit">{{ item2_name }}</button>
-        </form>
+        <div class="card">
+            <h3>Compare:</h3>
+            <h4>{{ item1_name }} vs {{ item2_name }}</h4>
+            <form action="{{ url_for('do_comparison', item1_id=item1_id, item2_id=item2_id) }}" method="POST">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" name="winner" value="{{ item1_id }}">{{ item1_name }}</button>
+                    <span class="mx-3">or</span>
+                    <button type="submit" class="btn btn-success" name="winner" value="{{ item2_id }}">{{ item2_name }}</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="counter">
+            Comparisons: {{ current_comparison }} / {{ total_comparisons }}
+        </div>
     </div>
 </body>
 </html>
