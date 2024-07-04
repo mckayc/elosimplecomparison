@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Your Stuff!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yUXeohlcdEarOphQQqp/+HrjDwsvIm7NMVWJJTvq8ONxy5m+zWJ8/}ONQxAl0J" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-3">
+        <h1>Save Your Stuff!</h1>
+        <form method="POST" action="/save">
+            <div class="mb-3">
+                <label for="user_input" class="form-label">Enter something to save:</label>
+                <input type="text" class="form-control" id="user_input" name="user_input" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        <hr>
+        <h2>Saved Data</h2>
+        <ul>
+            {% for item in data %}
+                <li>{{ item[1] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

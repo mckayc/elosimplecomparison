@@ -1,3 +1,2 @@
-flask
-SQLAlchemy
-mysql-connector-python
+Flask
+sqlite3

@@ -1,27 +1,10 @@
-version: '3'
+version: "3.8"
+
 services:
-  webapp:
-    build: .
-    image: mckayc/elosimplecomparison:dev
+  elocompare:
+    image: mckayc/elosimplecomparison:dev  # Replace with your image name
     container_name: elocompare
     restart: unless-stopped
+    build: .
     ports:
-      - "5000:5000"
-    environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=password
-      - DB_NAME=elocompare
-    depends_on:
-      - db
-
-  db:
-    image: mariadb:latest
-    container_name: elocompare-db
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=elocompare
-    volumes:
-      - ./db_data:/var/lib/mysql
+      - "5000:5000"  # Expose port 5000 for the app
