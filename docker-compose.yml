@@ -7,14 +7,21 @@ services:
     restart: unless-stopped
     ports:
       - "5000:5000"
-    volumes:
-      - ./app:/app
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root  # Replace with your MariaDB username
+      - DB_PASSWORD=password  # Replace with your MariaDB password
+      - DB_NAME=elocompare  # Replace with your database name
     depends_on:
       - db
 
   db:
-    image: tiangolo/sqlite:latest
+    image: mariadb:latest
     container_name: elocompare-db
     restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=password  # Set your root password here
+      - MYSQL_DATABASE=elocompare  # Set your database name here
     volumes:
-      - ./app/database.db:/app/database.db
+      - ./db_data:/var/lib/mysql  # Persist data outside the container
