@@ -10,9 +10,9 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_USER=root  # Replace with your MariaDB username
-      - DB_PASSWORD=password  # Replace with your MariaDB password
-      - DB_NAME=elocompare  # Replace with your database name
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=elocompare
     depends_on:
       - db
 
@@ -21,7 +21,7 @@ services:
     container_name: elocompare-db
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=password  # Set your root password here
-      - MYSQL_DATABASE=elocompare  # Set your database name here
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=elocompare
     volumes:
-      - ./db_data:/var/lib/mysql  # Persist data outside the container
+      - ./db_data:/var/lib/mysql
