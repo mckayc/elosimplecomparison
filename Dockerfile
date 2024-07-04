@@ -1,22 +1,20 @@
-# Use the official Python image
+# Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Copy the application code
-COPY . .
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the Flask port
+# Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Command to run the Flask application
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
 CMD ["python", "app.py"]

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Entries</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>All Entries</h1>
+        <ul>
+            {% for entry in entries %}
+                <li><a href="{{ url_for('display', entry_id=entry.id) }}">{{ entry.title }} - {{ entry.timestamp }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
