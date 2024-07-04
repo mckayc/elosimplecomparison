@@ -1,97 +1,38 @@
-/* Reset some default styles */
-body, html {
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #fff;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #1f1f1f;
-    color: #fff;
 }
 
-/* Container styling */
 .container {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background-color: #333;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-/* Form styling */
-form {
-    width: 100%;
-}
-
-fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-legend {
-    font-size: 1.2em;
-    margin-bottom: 10px;
 }
 
 input[type="text"], textarea {
     width: 100%;
-    padding: 8px;
-    margin: 5px 0 15px;
+    padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    background-color: #f1f1f1;
-    color: #333;
-}
-
-input[type="text"]:focus, textarea:focus {
-    outline: none;
-    border-color: #4CAF50;
-    background-color: #fff;
-}
-
-input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-input[type="submit"]:hover {
-    background-color: #45a049;
-}
-
-/* Links and lists */
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    margin-bottom: 10px;
-}
-
-a {
-    color: #4CAF50;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Header and footer */
-header, footer {
-    background-color: #222;
-    padding: 10px 20px;
-    text-align: center;
-    margin-top: 20px;
-    border-radius: 4px;
-}
-
-header h1, footer p {
+    background-color: #444;
     color: #fff;
 }
 
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #008cba;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #005f70;
+}

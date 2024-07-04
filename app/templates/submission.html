@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Web App - Entries for {{ entries[0][1] }}</title>
+    <title>Web App - Submission Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Entries for {{ entries[0][1] }}</h1>
+        <h1>Submission Results</h1>
         <ul>
             {% for entry in entries %}
-            <li>{{ entry[2] }} - {{ entry[3] }}</li>
+            <li><a href="{{ url_for('show_entries', title=entry[1]) }}">{{ entry[1] }} - {{ entry[3] }}</a></li>
             {% endfor %}
         </ul>
     </div>

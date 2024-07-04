@@ -1,26 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Enter Your Entry</title>
+    <title>Web App - Submit Entry</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Enter Your Entry</h1>
-    <form method="POST" action="/">
-        {{ form.hidden_tag() }}
-        <fieldset>
-            <legend>New Entry</legend>
-            <div>
-                {{ form.title.label }}<br>
-                {{ form.title(size=40) }}
-            </div>
-            <div>
-                {{ form.content.label }}<br>
-                {{ form.content(rows=10, cols=60) }}
-            </div>
-        </fieldset>
-        <div>{{ form.submit() }}</div>
-    </form>
+    <div class="container">
+        <h1>Submit Entry</h1>
+        <form method="post" action="/">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="content" placeholder="Enter your text here" rows="6" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
