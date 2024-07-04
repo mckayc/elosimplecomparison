@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   web:
@@ -8,23 +8,3 @@ services:
     restart: unless-stopped
     ports:
       - "5000:5000"
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbname
-    depends_on:
-      - db
-
-  db:
-    image: postgres:13
-    container_name: elocompare_db
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbname
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:

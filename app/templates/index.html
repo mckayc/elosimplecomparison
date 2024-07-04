@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter Your Entry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Enter Your Entry</h1>
+    <form method="POST" action="/">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <legend>New Entry</legend>
+            <div>
+                {{ form.title.label }}<br>
+                {{ form.title(size=40) }}
+            </div>
+            <div>
+                {{ form.content.label }}<br>
+                {{ form.content(rows=10, cols=60) }}
+            </div>
+        </fieldset>
+        <div>{{ form.submit() }}</div>
+    </form>
+</body>
+</html>
