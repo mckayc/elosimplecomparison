@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from urllib.parse import quote  # Use quote from urllib.parse instead of url_quote
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://user:password@db/dbname'
