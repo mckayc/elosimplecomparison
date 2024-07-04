@@ -1,6 +1,7 @@
 version: '3'
 services:
   webapp:
+    build: .
     image: mckayc/elosimplecomparison:dev
     container_name: elocompare
     restart: unless-stopped
@@ -12,7 +13,7 @@ services:
       - db
 
   db:
-    image: sqlite:latest
+    image: tiangolo/sqlite:latest
     container_name: elocompare-db
     restart: unless-stopped
     volumes:
